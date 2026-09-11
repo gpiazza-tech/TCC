@@ -563,12 +563,12 @@ LIBTCCAPI int tcc_add_symbol(TCCState *s1, const char *name, const void *val)
 
 /* list elf symbol names and values */
 ST_FUNC void list_elf_symbols(TCCState *s, void *ctx,
-    void (*symbol_cb)(void *ctx, const char *name, const void *val))
+    void (*symbol_cb)(void *ctx, const char *name, const void *val, int type))
 {
     ElfW(Sym) *sym;
     Section *symtab;
     int sym_index, end_sym;
-    const char *name;
+    const char *name; 
     unsigned char sym_vis, sym_bind;
 
     symtab = s->symtab;
@@ -579,15 +579,19 @@ ST_FUNC void list_elf_symbols(TCCState *s, void *ctx,
             name = (char *) symtab->link->data + sym->st_name;
             sym_bind = ELFW(ST_BIND)(sym->st_info);
             sym_vis = ELFW(ST_VISIBILITY)(sym->st_other);
+
+            int sym_type = ELFW(ST_TYPE)(sym->st_info);
+            size_t sym_size = ELFW(ST_TYPE)(sym->st_size);
+
             if (sym_bind == STB_GLOBAL && sym_vis == STV_DEFAULT)
-                symbol_cb(ctx, name, (void*)(uintptr_t)sym->st_value);
+                symbol_cb(ctx, name, (void*)(uintptr_t)sym->st_value, sym_type);
         }
     }
 }
 
 /* list elf symbol names and values */
 LIBTCCAPI void tcc_list_symbols(TCCState *s, void *ctx,
-    void (*symbol_cb)(void *ctx, const char *name, const void *val))
+    void (*symbol_cb)(void *ctx, const char *name, const void *val, int type))
 {
     list_elf_symbols(s, ctx, symbol_cb);
 }

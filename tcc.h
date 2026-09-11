@@ -1581,7 +1581,7 @@ ST_FUNC void add_array(TCCState *s1, const char *sec, int c);
 ST_FUNC struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 ST_FUNC addr_t get_sym_addr(TCCState *s, const char *name, int err, int forc);
 ST_FUNC void list_elf_symbols(TCCState *s, void *ctx,
-    void (*symbol_cb)(void *ctx, const char *name, const void *val));
+    void (*symbol_cb)(void *ctx, const char *name, const void *val, int type));
 ST_FUNC int set_global_sym(TCCState *s1, const char *name, Section *sec, addr_t offs);
 
 /* Browse each elem of type <type> in section <sec> starting at elem <startoff>
